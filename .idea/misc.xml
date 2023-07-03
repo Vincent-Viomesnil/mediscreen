@@ -5,6 +5,10 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/mediscreen_assess/pom.xml" />
+        <option value="$PROJECT_DIR$/mediscreen_mdb/pom.xml" />
+        <option value="$PROJECT_DIR$/mediscreen_patient/pom.xml" />
+        <option value="$PROJECT_DIR$/mediscreen_ui/pom.xml" />
       </list>
     </option>
   </component>
