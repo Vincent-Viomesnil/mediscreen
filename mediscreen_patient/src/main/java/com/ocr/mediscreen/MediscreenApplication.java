@@ -9,6 +9,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class MediscreenApplication {
 
+	//Spring
+
 	public static void main(String[] args) {
 		SpringApplication.run(MediscreenApplication.class, args);
 	}
