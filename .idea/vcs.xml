@@ -2,9 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mediscreen_assess" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mediscreen_mdb" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mediscreen_patient" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/mediscreen_ui" vcs="Git" />
   </component>
 </project>
