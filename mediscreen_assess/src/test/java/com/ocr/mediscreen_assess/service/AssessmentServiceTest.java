@@ -124,7 +124,7 @@ public class AssessmentServiceTest {
         String result = assessmentService.getAssessmentById(patId);
 
         // Assert
-        assertEquals("John Doe (age 23) diabetes assessment is: In Danger", result);
+        assertEquals("John Doe (age 23) diabetes assessment is: InDanger", result);
         verify(microservicePatientProxy, times(1)).getPatientById(patId);
         verify(microserviceNotesProxy, times(1)).getListNotesByPatId(patId);
     }
@@ -167,7 +167,7 @@ public class AssessmentServiceTest {
         String result = assessmentService.getAssessmentById(patId);
 
         // Assert
-        assertEquals("John Doe (age 23) diabetes assessment is: Early onset", result);
+        assertEquals("John Doe (age 23) diabetes assessment is: EarlyOnset", result);
         verify(microservicePatientProxy, times(1)).getPatientById(patId);
         verify(microserviceNotesProxy, times(1)).getListNotesByPatId(patId);
     }
@@ -216,7 +216,7 @@ public class AssessmentServiceTest {
         String result = assessmentService.getAssessmentById(patId);
 
         // Assert
-        assertEquals("Lea James (age 23) diabetes assessment is: Early onset", result);
+        assertEquals("Lea James (age 23) diabetes assessment is: EarlyOnset", result);
         verify(microservicePatientProxy, times(1)).getPatientById(patId);
         verify(microserviceNotesProxy, times(1)).getListNotesByPatId(patId);
     }
@@ -267,7 +267,7 @@ public class AssessmentServiceTest {
         String result = assessmentService.getAssessmentById(patId);
 
         // Assert
-        assertEquals("Lea James (age 23) diabetes assessment is: Early onset", result);
+        assertEquals("Lea James (age 23) diabetes assessment is: EarlyOnset", result);
         verify(microservicePatientProxy, times(1)).getPatientById(patId);
         verify(microserviceNotesProxy, times(1)).getListNotesByPatId(patId);
     }

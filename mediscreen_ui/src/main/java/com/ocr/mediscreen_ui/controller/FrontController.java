@@ -77,18 +77,19 @@ public class FrontController {
     @GetMapping("/PatHistory/patid/{patId}")
     public String getPatientDetails(@PathVariable Long patId, Model model, RedirectAttributes redir) {
         try {
-        List<PatientHistoryBean> patientHistoryList = microserviceNotesProxy.getListNotesByPatId(patId);
-        String assessmentResult = assessmentProxy.getAssessmentById(patId);
+            List<PatientHistoryBean> patientHistoryList = microserviceNotesProxy.getListNotesByPatId(patId);
+            String assessmentResult = assessmentProxy.getAssessmentById(patId);
+            String assessmentResultWithoutLastElement = assessmentResult.substring(0, assessmentResult.lastIndexOf(" "));
+            model.addAttribute("assessmentResultWithoutLastElement", assessmentResultWithoutLastElement);
 
-        model.addAttribute("patientHistoryList", patientHistoryList);
-        model.addAttribute("assessmentResult", assessmentResult);
-
-        return "PatientDetails";
+            model.addAttribute("patientHistoryList", patientHistoryList);
+            model.addAttribute("assessmentResult", assessmentResult);
+            return "PatientDetails";
         } catch (FeignException.BadRequest e) {
             throw new PatientNotFoundException("Request Incorrect");
-            } catch(FeignException e){
-        redir.addFlashAttribute("error", e.status() + " during operation");
-        return "redirect:/";
+        } catch (FeignException e) {
+            redir.addFlashAttribute("error", e.status() + " during operation");
+            return "redirect:/";
         }
 
     }
@@ -106,7 +107,7 @@ public class FrontController {
     }
 
 
-    @GetMapping(value="/Patient/add")
+    @GetMapping(value = "/Patient/add")
     public String getPatient(Model model) {
         PatientBean patient = new PatientBean();
         model.addAttribute("patient", patient);
@@ -166,7 +167,7 @@ public class FrontController {
             model.addAttribute("patientBean", patientBean);
             model.addAttribute("uniquePatientList", uniquePatientList);
             return "redirect:/";
-    } catch (FeignException e) {
+        } catch (FeignException e) {
             redir.addFlashAttribute("error", e.status() + " during operation");
             return "AddNote";
         }
@@ -212,6 +213,7 @@ public class FrontController {
 
         return "UpdatePH";
     }
+
     @PostMapping(value = "/PatHistory/update/{id}")
     public String updatePatientHistory(@PathVariable Long id, PatientHistoryBean patientToUpdate, Model model,
                                        RedirectAttributes redir) {
@@ -246,5 +248,4 @@ public class FrontController {
         model.addAttribute("uniquePatientList", uniquePatientList);
         return "redirect:/";
     }
-
 }

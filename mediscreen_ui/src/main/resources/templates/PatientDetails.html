@@ -5,7 +5,6 @@
     <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.0.0-2/css/bootstrap.min.css" />
 </head>
 <body>
-
 <div class="container">
     <h1>Mediscreen - Patient Details</h1>
     <div class="row">
@@ -17,12 +16,18 @@
         </div>
         <div class="col-md-6">
             <h3>Assessment Result:</h3>
-            <p th:text="${assessmentResult}"></p>
+            <p>
+                <span th:text="${assessmentResultWithoutLastElement}"></span>
+                <span th:if="${assessmentResult.contains('None')}" style="color: red;"><strong>None</strong></span>
+                <span th:if="${assessmentResult.contains('Borderline')}" style="color: orange;"><strong>Borderline</strong></span>
+                <span th:if="${assessmentResult.contains('InDanger')}" style="color: red;"><strong>In Danger</strong></span>
+                <span th:if="${assessmentResult.contains('EarlyOnset')}" style="color: darkred;"><strong>Early Onset</strong></span>
+                <span th:unless="${assessmentResult.contains('None') or assessmentResult.contains('Borderline') or assessmentResult.contains('InDanger') or assessmentResult.contains('EarlyOnset')}"
+                      style="color: black;"><strong>Unknown</strong></span>
+            </p>
         </div>
     </div>
 </div>
-
 <script type="text/javascript" src="webjars/bootstrap/4.0.0-2/js/bootstrap.min.js"></script>
-
 </body>
 </html>
