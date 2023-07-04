@@ -91,7 +91,7 @@
             <h3>Assessment Result:</h3>
             <p>
                 <span th:text="${assessmentResultWithoutLastElement}"></span>
-                <span th:if="${assessmentResult.contains('None')}" style="color: red;"><strong>None</strong></span>
+                <span th:if="${assessmentResult.contains('None')}" style="color: green;"><strong>None</strong></span>
                 <span th:if="${assessmentResult.contains('Borderline')}" style="color: orange;"><strong>Borderline</strong></span>
                 <span th:if="${assessmentResult.contains('InDanger')}" style="color: red;"><strong>In Danger</strong></span>
                 <span th:if="${assessmentResult.contains('EarlyOnset')}" style="color: darkred;"><strong>Early Onset</strong></span>
