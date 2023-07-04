@@ -46,7 +46,7 @@ public class PatientControllerTest {
 
         when(patientService.findAll()).thenReturn(patients);
 
-        mockMvc.perform(get("/Patients"))
+        mockMvc.perform(get("/patients"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 

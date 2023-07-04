@@ -9,22 +9,22 @@ import java.util.List;
 @FeignClient(name = "mediscreen-mdb", url = "${mediscreen-mdb.url}")
 public interface MicroserviceNotesProxy {
 
-    @GetMapping(value = "/PatHistoryList")
+    @GetMapping(value = "/pathistorylist")
     List<PatientHistoryBean> patientList();
 
-    @GetMapping(value = "/PatHistory/patid/{patId}")
+    @GetMapping(value = "/pathistory/patid/{patId}")
     List<PatientHistoryBean> getListNotesByPatId(@PathVariable Long patId);
 
-    @GetMapping(value = "/PatHistory/noteid/{noteId}")
+    @GetMapping(value = "/pathistory/noteid/{noteId}")
     PatientHistoryBean getNoteById(@PathVariable Long noteId);
 
-    @PostMapping(value = "/PatHistory/add")
+    @PostMapping(value = "/pathistory/add")
     PatientHistoryBean addNote(@RequestBody PatientHistoryBean patientHistory);
 
-    @PutMapping("/PatHistory/update/{id}")
+    @PutMapping("/pathistory/update/{id}")
     PatientHistoryBean updateNoteById(@PathVariable Long id, @RequestBody PatientHistoryBean patientNoteToUpdate);
 
-    @DeleteMapping(value = "/PatHistory/delete/{noteId}")
+    @DeleteMapping(value = "/pathistory/delete/{noteId}")
     void deleteNoteById(@PathVariable Long noteId);
 
 

@@ -17,7 +17,7 @@ public class PatientHistoryController {
     @Autowired
     private PatientHistoryService patientHistoryService;
 
-    @GetMapping(value = "/PatHistoryList")
+    @GetMapping(value = "/pathistorylist")
     public List<PatientHistory> patientList() {
         logger.info("Get All the Notes");
         return patientHistoryService.findAll();

@@ -10,7 +10,7 @@ import java.util.List;
 @FeignClient(name = "mediscreen-mdb", url = "${mediscreen-mdb.url}")
 public interface MicroserviceNotesProxy {
 
-    @GetMapping(value = "/PatHistoryList")
+    @GetMapping(value = "/pathistorylist")
     List<PatientHistoryBean> patientList();
 
     @GetMapping(value = "/pathistory/patid/{patId}")
