@@ -38,13 +38,13 @@ public class PatientHistoryService {
 
     public void deleteNoteById(Long noteId) {
         Optional<PatientHistory> note =  patientHistoryDAO.findByNoteId(noteId);
-        if (note.isEmpty()) throw new NoteNotFoundException("Note with id " + noteId + " doesn't exist");
-            patientHistoryDAO.deleteByNoteId(noteId);
+        if (!note.isPresent()) throw new NoteNotFoundException("Note with id " + noteId + " doesn't exist");
+        patientHistoryDAO.deleteByNoteId(noteId);
     }
 
     public PatientHistory getNoteById(Long noteId) {
         Optional<PatientHistory> note =  patientHistoryDAO.findByNoteId(noteId);
-        if (note.isEmpty()) throw new NoteNotFoundException("Note with id " + noteId + " doesn't exist");
+        if (!note.isPresent()) throw new NoteNotFoundException("Note with id " + noteId + " doesn't exist");
         return note.get();
     }
 
