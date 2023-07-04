@@ -13,6 +13,6 @@ public interface MicroserviceNotesProxy {
     @GetMapping(value = "/PatHistoryList")
     List<PatientHistoryBean> patientList();
 
-    @GetMapping(value = "/PatHistory/patid/{patId}")
+    @GetMapping(value = "/pathistory/patid/{patId}")
     List<PatientHistoryBean> getListNotesByPatId(@PathVariable Long patId);
 }

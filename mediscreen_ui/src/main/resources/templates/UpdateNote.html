@@ -30,7 +30,7 @@
         <div class="col-lg-6">
             <div class="card">
                 <div class="card-body">
-                    <form action='#' th:action="@{/PatHistory/update/{noteId}(noteId=${patientHistory.noteId})}" th:object="${patientHistory}" method="post" class="form-horizontal" style="width: 100%">
+                    <form action='#' th:action="@{/pathistory/update/{noteId}(noteId=${patientHistory.noteId})}" th:object="${patientHistory}" method="post" class="form-horizontal" style="width: 100%">
 
                         <div class="form-group">
                             <label for="noteId" class="col-sm-2 control-label">Note Id</label>
@@ -59,7 +59,7 @@
                         <div class="form-group">
                             <div class="col-sm-12">
                                 <input type="hidden" th:field="*{patId}">
-                                <a class="btn btn-danger btn-sm" href="/PatientList">Cancel</a>
+                                <a class="btn btn-danger btn-sm" href="/patientlist">Cancel</a>
                                 <input class="btn btn-primary btn-sm" type="submit" value="Update Note">
                             </div>
                         </div>

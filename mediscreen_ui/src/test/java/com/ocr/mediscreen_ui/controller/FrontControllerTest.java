@@ -51,7 +51,7 @@ public class FrontControllerTest {
 
     @Test
     public void testHome() throws Exception {
-        mockMvc.perform(get("/PatientList"))
+        mockMvc.perform(get("/patientlist"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("Home"))
                 .andExpect(model().attributeExists("uniquePatientList"));
@@ -65,7 +65,7 @@ public class FrontControllerTest {
 
         given(microservicePatientProxy.getPatientById(patientId)).willThrow(PatientNotFoundException.class);
 
-        mockMvc.perform(get("/Patient/id/{id}", patientId))
+        mockMvc.perform(get("/patient/id/{id}", patientId))
                 .andExpect(status().is4xxClientError());
     }
 
@@ -75,7 +75,7 @@ public class FrontControllerTest {
         List<PatientBean> patients = new ArrayList<>();
         given(microservicePatientProxy.patientList()).willReturn(patients);
 
-        mockMvc.perform(get("/PatHistory/add"))
+        mockMvc.perform(get("/pathistory/add"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("AddNote"))
                 .andExpect(model().attributeExists("patients"))
@@ -85,7 +85,7 @@ public class FrontControllerTest {
 
     @Test
     public void testGetPatient() throws Exception {
-        mockMvc.perform(get("/Patient/add"))
+        mockMvc.perform(get("/patient/add"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("AddPatient"))
                 .andExpect(model().attributeExists("patient"))
@@ -101,11 +101,11 @@ public class FrontControllerTest {
 
         given(microservicePatientProxy.getPatientById(anyLong())).willReturn(patient);
 
-        mockMvc.perform(post("/Patient/validate")
+        mockMvc.perform(post("/patient/validate")
                         .flashAttr("patient", patient)
                         .sessionAttr("patientExisting", patient))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/PatientList"))
+                .andExpect(view().name("redirect:/patientlist"))
                 .andExpect(flash().attributeExists("success"));
     }
 
@@ -123,11 +123,11 @@ public class FrontControllerTest {
 
         given(microservicePatientProxy.getPatientById(anyLong())).willReturn(patientExisting);
 
-        mockMvc.perform(post("/Patient/validate")
+        mockMvc.perform(post("/patient/validate")
                         .flashAttr("patient", patient)
                         .sessionAttr("patientExisting", patientExisting))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/PatientList"));
+                .andExpect(view().name("redirect:/patientlist"));
     }
 
     @Test
@@ -136,7 +136,7 @@ public class FrontControllerTest {
 
         given(microserviceNotesProxy.addNote(patientHistory)).willReturn(patientHistory);
 
-        mockMvc.perform(post("/PatHistory/validate")
+        mockMvc.perform(post("/pathistory/validate")
                         .flashAttr("patientHistory", patientHistory))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/patientdetails?patId=null"));
@@ -152,7 +152,7 @@ public class FrontControllerTest {
         given(microservicePatientProxy.updatePatientById(patientId, patientToUpdate)).willReturn(patientUpdated);
         given(microservicePatientProxy.patientList()).willReturn(uniquePatientList);
 
-        mockMvc.perform(post("/Patient/update/{id}", patientId)
+        mockMvc.perform(post("/patient/update/{id}", patientId)
                         .flashAttr("patientToUpdate", patientToUpdate))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/patientdetails?patId=1"));
@@ -165,7 +165,7 @@ public class FrontControllerTest {
 
         given(microservicePatientProxy.updatePatientById(patientId, patientToUpdate)).willThrow(FeignException.BadRequest.class);
 
-        mockMvc.perform(post("/Patient/update/{id}", patientId)
+        mockMvc.perform(post("/patient/update/{id}", patientId)
                         .flashAttr("patientToUpdate", patientToUpdate))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/patientdetails?patId=1"));
@@ -183,7 +183,7 @@ public class FrontControllerTest {
         when(microserviceNotesProxy.getNoteById(id)).thenReturn(patientHistory);
         when(microserviceNotesProxy.getListNotesByPatId(id)).thenReturn(patientHistoryList);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/PatHistory/update/{id}", id))
+        mockMvc.perform(MockMvcRequestBuilders.get("/pathistory/update/{id}", id))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.model().attribute("patientHistoryList", patientHistoryList))
                 .andExpect(MockMvcResultMatchers.model().attribute("patientHistory", patientHistory))
@@ -203,7 +203,7 @@ public class FrontControllerTest {
         when(microservicePatientProxy.getPatientById(id)).thenReturn(patient);
         when(microservicePatientProxy.patientList()).thenReturn(uniquePatientList);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/Patient/update/{id}", id))
+        mockMvc.perform(MockMvcRequestBuilders.get("/patient/update/{id}", id))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.model().attribute("uniquePatientList", uniquePatientList))
                 .andExpect(MockMvcResultMatchers.model().attribute("patient", patient))
@@ -244,9 +244,9 @@ public class FrontControllerTest {
         long patientId = 1;
         List<PatientBean> uniquePatientList = new ArrayList<>();
 
-        mockMvc.perform(post("/Patient/delete/{id}", patientId))
+        mockMvc.perform(post("/patient/delete/{id}", patientId))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/PatientList"));
+                .andExpect(view().name("redirect:/patientlist"));
     }
 
     @Test
@@ -254,9 +254,9 @@ public class FrontControllerTest {
         long noteId = 1;
         List<PatientHistoryBean> uniquePatientList = new ArrayList<>();
 
-        mockMvc.perform(post("/PatHistory/delete/{id}", noteId))
+        mockMvc.perform(post("/pathistory/delete/{id}", noteId))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/PatientList"));
+                .andExpect(view().name("redirect:/patientlist"));
     }
 
     @Test
@@ -265,7 +265,7 @@ public class FrontControllerTest {
 
         given(microservicePatientProxy.patientList()).willReturn(patients);
 
-        mockMvc.perform(get("/PatientList"))
+        mockMvc.perform(get("/patientlist"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("Home"));
     }
@@ -277,11 +277,11 @@ public class FrontControllerTest {
         PatientBean patientBean = new PatientBean();
         when(microservicePatientProxy.getPatientById(patId)).thenReturn(null);
 
-        mockMvc.perform(post("/Patient/validate")
+        mockMvc.perform(post("/patient/validate")
                         .param("firstname", "First")
                         .param("lastname", "Last")
                         .param("birthdate", "1990-01-01"))
-                .andExpect(MockMvcResultMatchers.redirectedUrl("/PatientList"));
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/patientlist"));
     }
 
     @Test

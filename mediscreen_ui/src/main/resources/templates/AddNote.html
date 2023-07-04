@@ -31,7 +31,7 @@
     <div class="container py-5">
         <div class="row">
             <div class="col-lg-6">
-                <form action="#" th:action="@{/PatHistory/validate}" th:object="${patientHistory}" method="post" class="form-horizontal" style="width: 100%">
+                <form action="#" th:action="@{/pathistory/validate}" th:object="${patientHistory}" method="post" class="form-horizontal" style="width: 100%">
 
                     <div class="form-group">
                         <label for="patId">Patient ID</label>
@@ -57,7 +57,7 @@
                     </div>
 
                     <div class="form-group">
-                        <a class="btn btn-danger btn-sm" href="/PatientList">Cancel</a>
+                        <a class="btn btn-danger btn-sm" href="/patientlist">Cancel</a>
                         <button type="submit" class="btn btn-primary">Add Note</button>
                     </div>
                 </form>

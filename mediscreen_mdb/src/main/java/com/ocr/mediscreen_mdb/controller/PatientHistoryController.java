@@ -23,25 +23,25 @@ public class PatientHistoryController {
         return patientHistoryService.findAll();
     }
 
-    @GetMapping(value = "/PatHistory/patid/{patId}")
+    @GetMapping(value = "/pathistory/patid/{patId}")
     public List<PatientHistory> getListNotesByPatId(@PathVariable Long patId) {
         logger.info("get list of notes with patient id : " + patId);
         return patientHistoryService.getListNotesByPatId(patId);
     }
 
-    @GetMapping(value = "/PatHistory/noteid/{noteId}")
+    @GetMapping(value = "/pathistory/noteid/{noteId}")
     public PatientHistory getNoteById(@PathVariable Long noteId) {
         logger.info("Get Note Id: " + noteId);
         return patientHistoryService.getNoteById(noteId);
     }
 
-    @PostMapping(value = "/PatHistory/add")
+    @PostMapping(value = "/pathistory/add")
     public PatientHistory addNote(@RequestBody PatientHistory patientHistory) {
         logger.info("Note Added: ");
         return patientHistoryService.addPatientHistory(patientHistory);
     }
 
-    @PutMapping("/PatHistory/update/{id}")
+    @PutMapping("/pathistory/update/{id}")
     public PatientHistory updateNoteById(@PathVariable Long id,
                                          @RequestBody PatientHistory patientNoteToUpdate) {
         logger.info("Note updated : " + id);
@@ -50,7 +50,7 @@ public class PatientHistoryController {
         return patientHistoryService.updateNoteById(noteUpdated);
     }
 
-    @DeleteMapping(value = "/PatHistory/delete/{noteId}")
+    @DeleteMapping(value = "/pathistory/delete/{noteId}")
     public void deleteNoteById(@PathVariable Long noteId) {
         logger.info("Note deleted : " + noteId);
         patientHistoryService.deleteNoteById(noteId);

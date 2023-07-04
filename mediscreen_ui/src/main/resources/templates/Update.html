@@ -31,7 +31,7 @@
         <div class="col-lg-6">
             <div class="card">
                 <div class="card-body">
-                    <form action="#" th:action="@{|/Patient/update/${id}|}" th:object="${patient}" method="post" class="form-horizontal">
+                    <form action="#" th:action="@{|/patient/update/${id}|}" th:object="${patient}" method="post" class="form-horizontal">
                         <div class="form-group">
                             <label for="firstname">Firstname</label>
                             <input type="text" th:field="*{firstname}" id="firstname" required maxlength="50" placeholder="Firstname" class="form-control">
@@ -63,7 +63,7 @@
                         </div>
                         <div class="form-group">
                             <div class="text-center">
-                                <a class="btn btn-danger btn-sm" href="/PatientList">Cancel</a>
+                                <a class="btn btn-danger btn-sm" href="/patientlist">Cancel</a>
                                 <input class="btn btn-primary btn-sm" type="submit" value="Update Patient">
                             </div>
                         </div>
