@@ -10,19 +10,19 @@ import java.util.List;
 public interface MicroservicePatientProxy {
 
 
-    @GetMapping(value = "/Patients")
+    @GetMapping(value = "/patients")
     List<PatientBean> patientList();
 
-    @GetMapping(value = "/Patient/id/{id}")
+    @GetMapping(value = "/patient/id/{id}")
     PatientBean getPatientById(@PathVariable Long id);
 
-    @PostMapping(value = "/Patient/add")
+    @PostMapping(value = "/patient/add")
     PatientBean addPatient(PatientBean patient);
 
-    @PutMapping(value = "/Patient/update/{id}")
+    @PutMapping(value = "/patient/update/{id}")
     PatientBean updatePatientById(@PathVariable Long id, PatientBean patientToUpdate);
 
-    @DeleteMapping(value = "/Patient/delete/{id}")
+    @DeleteMapping(value = "/patient/delete/{id}")
     void deletePatientById(@PathVariable Long id);
 
 }

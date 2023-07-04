@@ -1,7 +1,5 @@
 package com.ocr.mediscreen.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ocr.mediscreen.controller.PatientController;
 import com.ocr.mediscreen.exceptions.PatientNotFoundException;
 import com.ocr.mediscreen.model.Patient;
 import com.ocr.mediscreen.service.PatientService;
@@ -48,7 +46,7 @@ public class PatientControllerTest {
 
         when(patientService.findAll()).thenReturn(patients);
 
-        mockMvc.perform(get("/Patients"))
+        mockMvc.perform(get("/patients"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON));
 
@@ -62,7 +60,7 @@ public class PatientControllerTest {
 
         when(patientService.findById(1L)).thenReturn(patient);
 
-        mockMvc.perform(get("/Patient/id/{id}", 1L))
+        mockMvc.perform(get("/patient/id/{id}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id").value(patient.getId()))
@@ -80,7 +78,7 @@ public class PatientControllerTest {
     void testGetPatientByIdNotFoundException() throws Exception {
         when(patientService.findById(1L)).thenThrow(new PatientNotFoundException("Patient Not Found"));
 
-        mockMvc.perform(get("/Patient/id/{id}", 1L))
+        mockMvc.perform(get("/patient/id/{id}", 1L))
                 .andExpect(status().is4xxClientError());
 
         verify(patientService, times(1)).findById(1L);

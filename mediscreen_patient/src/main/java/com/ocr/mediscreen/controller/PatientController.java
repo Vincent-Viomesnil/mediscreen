@@ -15,27 +15,27 @@ public class PatientController {
     @Autowired
     private PatientService patientService;
 
-    @RequestMapping(value = "/Patients", method = RequestMethod.GET)
+    @RequestMapping(value = "/patients", method = RequestMethod.GET)
     public List<Patient> patientList() {
         return patientService.findAll();
     }
 
-    @GetMapping("/Patient/id/{id}")
+    @GetMapping("/patient/id/{id}")
     public Patient getPatientById(@PathVariable Long id) throws PatientNotFoundException {
         return patientService.findById(id);
     }
 
-    @PostMapping("/Patient/add")
+    @PostMapping("/patient/add")
     public Patient addPatient(@Valid @RequestBody Patient patient) {
         return patientService.addPatient(patient);
     }
 
-    @PutMapping("/Patient/update/{id}")
+    @PutMapping("/patient/update/{id}")
     public Patient updatePatientById(@PathVariable("id") Long id, @RequestBody Patient patient) {
         return patientService.updatePatientById(id, patient);
     }
 
-    @DeleteMapping(value = "/Patient/delete/{id}")
+    @DeleteMapping(value = "/patient/delete/{id}")
     public void deletePatientById(@PathVariable Long id) {
         patientService.deletePatientById(id);
     }

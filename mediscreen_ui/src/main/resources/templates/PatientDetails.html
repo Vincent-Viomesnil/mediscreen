@@ -6,23 +6,102 @@
 </head>
 <body>
 
+<header style="background-color: cornflowerblue; color: white; padding: 10px;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 text-center">
+                <h1>Mediscreen</h1>
+            </div>
+        </div>
+    </div>
+</header>
 <div class="container">
-    <h1>Mediscreen - Patient Details</h1>
+    <h1>Patient Details</h1>
+    <div class="row">
+        <a href="/patientlist" class="btn btn-primary btn-sm">Home</a>
+        <a href="/patient/add" class="btn btn-primary btn-sm">Add New Patient</a>
+        <a href="/pathistory/add" class="btn btn-primary btn-sm">Add New Note</a>
+        <a th:href="@{/patient/update/{id}(id=${patient.id})}" class="btn btn-info btn-sm">Update Patient</a>
+        <form th:action="@{/patient/delete/{id}(id=${patient.id})}" method="post"
+              onsubmit="return confirm('Are you sure you want to delete this patient?')">
+            <button type="submit" class="btn btn-danger btn-sm">Delete Patient</button>
+        </form>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group row">
+                <label>Lastname : </label>
+                <p th:text="${patient.lastname}"></p>
+            </div>
+            <div class="form-group row">
+                <label>Firstname : </label>
+                <p th:text="${patient.firstname}"></p>
+            </div>
+            <div class="form-group row">
+                <label>Birthdate : </label>
+                <p th:text="${patient.birthdate}"></p>
+            </div>
+            <div class="form-group row">
+                <label>Gender : </label>
+                <p th:text="${patient.gender}"></p>
+            </div>
+            <div class="form-group row">
+                <label>Address :</label>
+                <p th:text="${patient.address}"></p>
+            </div>
+            <div class="form-group row">
+                <label>PhoneNumber : </label>
+                <p th:text="${patient.phonenumber}"></p>
+            </div>
+        </div>
+
+    </div>
+
     <div class="row">
         <div class="col-md-6">
             <h3>Notes:</h3>
-            <ul>
-                <li th:each="note : ${patientHistoryList}" th:text="${note.notes}"></li>
-            </ul>
+            <div class="row">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Notes</th>
+                        <th>Note_Id</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="note : ${patientHistoryList}">
+                        <td th:text="${note.notes}"></td>
+                        <td th:text="${note.noteId}"></td>
+                        <td class="text-center">
+                            <a th:href="@{/pathistory/update/{noteId}(noteId=${note.noteId})}" class="btn btn-primary btn-sm">Update</a>
+                            <form th:action="@{/pathistory/delete/{noteId}(noteId=${note.noteId})}" method="post" onsubmit="return confirm('Are you sure you want to delete this note?')">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
+    </div>
+    <div class="row">
         <div class="col-md-6">
             <h3>Assessment Result:</h3>
-            <p th:text="${assessmentResult}"></p>
+            <p>
+                <span th:text="${assessmentResultWithoutLastElement}"></span>
+                <span th:if="${assessmentResult.contains('None')}" style="color: red;"><strong>None</strong></span>
+                <span th:if="${assessmentResult.contains('Borderline')}" style="color: orange;"><strong>Borderline</strong></span>
+                <span th:if="${assessmentResult.contains('InDanger')}" style="color: red;"><strong>In Danger</strong></span>
+                <span th:if="${assessmentResult.contains('EarlyOnset')}" style="color: darkred;"><strong>Early Onset</strong></span>
+                <span th:unless="${assessmentResult.contains('None') or assessmentResult.contains('Borderline') or assessmentResult.contains('InDanger') or assessmentResult.contains('EarlyOnset')}"
+                      style="color: black;"><strong>Unknown</strong></span>
+            </p>
         </div>
     </div>
 </div>
 
 <script type="text/javascript" src="webjars/bootstrap/4.0.0-2/js/bootstrap.min.js"></script>
-
 </body>
 </html>

@@ -50,9 +50,9 @@ public class AssessmentService {
         } else if (borderline(nbTrigger, age, gender)) {
             riskLevel = "Borderline";
         } else if (danger(nbTrigger, age, gender)) {
-            riskLevel = "In Danger";
+            riskLevel = "InDanger";
         } else if (earlyOnset(nbTrigger, age, gender)) {
-            riskLevel = "Early onset";
+            riskLevel = "EarlyOnset";
         }
         return diabetesAssessment(patient, riskLevel);
 

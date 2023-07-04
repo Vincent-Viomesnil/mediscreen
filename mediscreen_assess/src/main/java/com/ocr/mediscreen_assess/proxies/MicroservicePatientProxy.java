@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(name = "mediscreen", url = "${mediscreen.url}")
 public interface MicroservicePatientProxy {
-    @GetMapping(value = "/Patient/id/{id}")
+    @GetMapping(value = "/patient/id/{id}")
     PatientBean getPatientById(@PathVariable Long id);
 
 }
