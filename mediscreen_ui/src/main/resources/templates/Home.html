@@ -50,39 +50,3 @@
 <script type="text/javascript" src="webjars/bootstrap/4.0.0-2/js/bootstrap.min.js"></script>
 </body>
 </html>
-
-
-<!--    <table class="table table-bordered">-->
-<!--        <thead>-->
-<!--        <tr>-->
-<!--            <th>Id</th>-->
-<!--            <th>Firstname</th>-->
-<!--            <th>Lastname</th>-->
-<!--            <th>Birthdate</th>-->
-<!--            <th>Gender</th>-->
-<!--            <th>Address</th>-->
-<!--            <th>Phone</th>-->
-<!--            <th>Action</th>-->
-<!--        </tr>-->
-<!--        </thead>-->
-<!--        <tbody>-->
-<!--        <tr th:each="patient : ${uniquePatientList}">-->
-<!--            <td th:text="${patient.id}"></td>-->
-<!--            <td th:text="${patient.firstname}"></td>-->
-<!--            <td th:text="${patient.lastname}"></td>-->
-<!--            <td th:text="${patient.birthdate}"></td>-->
-<!--            <td th:text="${patient.gender}"></td>-->
-<!--            <td th:text="${patient.address}"></td>-->
-<!--            <td th:text="${patient.phonenumber}"></td>-->
-<!--            <td style="width: 15%" class="text-center">-->
-<!--                <a th:href="@{/Patient/update/{id}(id=${patient.id})}" class="btn btn-primary btn-sm">Update</a>-->
-<!--                <form th:action="@{/Patient/delete/{id}(id=${patient.id})}" method="post"-->
-<!--                      onsubmit="return confirm('Are you sure you want to delete this patient?')">-->
-<!--                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>-->
-<!--                </form>-->
-<!--            </td>-->
-<!--        </tr>-->
-<!--        </tbody>-->
-<!--    </table>-->
-
-

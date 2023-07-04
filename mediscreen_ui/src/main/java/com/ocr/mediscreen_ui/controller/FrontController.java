@@ -29,16 +29,16 @@ public class FrontController {
     @Autowired
     private MicroservicePatientProxy microservicePatientProxy;
 
-    @GetMapping("/notes/{patId}")
-    public String notesByPatId(@PathVariable Long patId, Model model, RedirectAttributes redir) {
-        List<PatientHistoryBean> listNotesByPatId = microserviceNotesProxy.getListNotesByPatId(patId);
-        PatientBean patient = microservicePatientProxy.getPatientById(patId);
-        model.addAttribute("listNotesByPatId", listNotesByPatId);
-        model.addAttribute("patientBean", patient);
-        redir.addFlashAttribute("success", "Patient successfully added");
-
-        return "Notes";
-    }
+//    @GetMapping("/notes/{patId}")
+//    public String notesByPatId(@PathVariable Long patId, Model model, RedirectAttributes redir) {
+//        List<PatientHistoryBean> listNotesByPatId = microserviceNotesProxy.getListNotesByPatId(patId);
+//        PatientBean patient = microservicePatientProxy.getPatientById(patId);
+//        model.addAttribute("listNotesByPatId", listNotesByPatId);
+//        model.addAttribute("patientBean", patient);
+//        redir.addFlashAttribute("success", "Patient successfully added");
+//
+//        return "Notes";
+//    }
 
     @GetMapping("/PatientList")
     public String home(Model model) {
@@ -47,35 +47,7 @@ public class FrontController {
         return "Home";
     }
 
-    @GetMapping(value = "/Patient/id/{id}")
-    public String getPatientById(@PathVariable Long id, Model model, RedirectAttributes redir) {
-        try {
-            PatientBean patient = microservicePatientProxy.getPatientById(id);
-            model.addAttribute("patient", patient);
-            redir.addFlashAttribute("success", "Patient successfully added");
-            return "Assess";
 
-        } catch (FeignException.BadRequest e) {
-            throw new PatientNotFoundException("Request Incorrect");
-        } catch (FeignException e) {
-            redir.addFlashAttribute("error", e.status() + " during operation");
-            return "Home";
-        }
-    }
-
-//    @GetMapping("/PatientHistoryList/Filter")
-//    public String getSheetPatient(Model model) {
-//        List<PatientHistoryBean> patientList = microserviceNotesProxy.patientList();
-//
-//        List<PatientHistoryBean> filteredList = patientList.stream()
-//                .collect(Collectors.groupingBy(PatientHistoryBean::getPatId))
-//                .values().stream()
-//                .flatMap(group -> group.stream().limit(1))
-//                .collect(Collectors.toList());
-//
-//        model.addAttribute("filteredList", filteredList);
-//        return "Assess";
-//    }
 
     @GetMapping("/patientdetails")
     public String getPatientDetails(@RequestParam(name = "patId") Long patId, Model model, RedirectAttributes redir) {
@@ -236,29 +208,20 @@ public class FrontController {
             List<PatientHistoryBean> patientHistoryList = microserviceNotesProxy.getListNotesByPatId(patientHistory.getPatId());
 
             model.addAttribute("patientHistoryList", patientHistoryList);
-            Long patId = patientToUpdate.getPatId();
+            Long patId = patientHistory.getPatId();
             redir.addFlashAttribute("success", "Note successfully updated");
 
             return "redirect:/patientdetails?patId=" + patId;
         } catch (FeignException e) {
             redir.addFlashAttribute("error", e.status() + " during operation");
-            return "Notes";
+            return "Home";
         }
     }
 
-//    @PostMapping(value = "/Patient/delete/{id}")
-//    public String deletePatient(@PathVariable Long id, Model model) {
-//        microservicePatientProxy.deletePatientById(id);
-//        List<PatientBean> uniquePatientList = microservicePatientProxy.patientList();
-//        model.addAttribute("uniquePatientList", uniquePatientList);
-//        return "redirect:/PatientList";
-//    }
 
     @PostMapping("/Patient/delete/{id}")
     public String deletePatient(@PathVariable("id") Long id, RedirectAttributes redir, Model model) {
         microservicePatientProxy.deletePatientById(id);
-//        List<PatientBean> uniquePatientList = microservicePatientProxy.patientList();
-//        model.addAttribute("uniquePatientList", uniquePatientList);
         redir.addFlashAttribute("success", "Patient successfully deleted");
         return "redirect:/PatientList";
     }
@@ -266,10 +229,12 @@ public class FrontController {
 
 
     @PostMapping(value = "/PatHistory/delete/{id}")
-    public String deletePatientById(@PathVariable Long id, Model model) {
+    public String deletePatientById(@PathVariable Long id, Model model, RedirectAttributes redir) {
         microserviceNotesProxy.deleteNoteById(id);
         List<PatientHistoryBean> uniquePatientList = microserviceNotesProxy.patientList();
         model.addAttribute("uniquePatientList", uniquePatientList);
+        redir.addFlashAttribute("success", "Note successfully deleted");
+
         return "redirect:/PatientList";
     }
 }
