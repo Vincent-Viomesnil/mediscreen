@@ -42,8 +42,13 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="lastname">Lastname</label>
-                        <input type="text" id="lastname" name="lastname" class="form-control" readonly th:value="${patientBean.firstname}">
+                        <label for="firstname">First Name</label>
+                        <input type="text" id="firstname" name="firstname" class="form-control" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastname">Last Name</label>
+                        <input type="text" id="lastname" name="lastname" class="form-control" readonly>
                     </div>
 
                     <div class="form-group">
@@ -52,7 +57,7 @@
                     </div>
 
                     <div class="form-group">
-                        <a class="btn btn-danger btn-sm" href="/">Cancel</a>
+                        <a class="btn btn-danger btn-sm" href="/PatientList">Cancel</a>
                         <button type="submit" class="btn btn-primary">Add Note</button>
                     </div>
                 </form>
@@ -65,20 +70,20 @@
 <script>
     function updateLastName() {
         var patId = document.getElementById("patId").value;
+        var firstnameField = document.getElementById("firstname");
         var lastnameField = document.getElementById("lastname");
         var selectedOption = document.querySelector("#patId option:checked");
         var firstname = selectedOption.getAttribute("data-firstname");
         var lastname = selectedOption.getAttribute("data-lastname");
 
         if (patId === "") {
+            firstnameField.value = "";
             lastnameField.value = "";
-            lastnameField.readOnly = true;
         } else {
-            lastnameField.value = firstname + " " + lastname;
-            lastnameField.readOnly = true;
+            firstnameField.value = firstname;
+            lastnameField.value = lastname;
         }
     }
-
 </script>
 </body>
 </html>

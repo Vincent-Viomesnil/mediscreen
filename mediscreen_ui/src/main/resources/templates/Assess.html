@@ -1,40 +1,40 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Mediscreen</title>
-    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.0.0-2/css/bootstrap.min.css" />
-</head>
-<body>
+<!--<!DOCTYPE HTML>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <title>Mediscreen</title>-->
+<!--    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.0.0-2/css/bootstrap.min.css" />-->
+<!--</head>-->
+<!--<body>-->
 
-<div th:if="${success}" class="alert alert-success">
-    <strong>Success:</strong> Patient successfully added/updated.
-</div>
+<!--<div th:if="${success}" class="alert alert-success">-->
+<!--    <strong>Success:</strong> Patient successfully added/updated.-->
+<!--</div>-->
 
-<div th:if="${error}" class="alert alert-danger">
-    <strong>Error:</strong> Failed to add/update patient.
-</div>
+<!--<div th:if="${error}" class="alert alert-danger">-->
+<!--    <strong>Error:</strong> Failed to add/update patient.-->
+<!--</div>-->
 
 
-<header style="background-color: cornflowerblue; color: white; padding: 10px;">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-12 text-center">
-                <h1>Mediscreen</h1>
-            </div>
-        </div>
-    </div>
-</header>
-<div class="container">
-    <h1> Assess</h1>
-    <div class="row">
-        <div th:each="patientHistory : ${filteredList}" class="col-md-4 my-1">
-            <a th:href="@{/PatHistory/patid/{patId}(patId=${patientHistory.patId})}">
-                <p th:text="${patientHistory.lastname}"></p>
-            </a>
-        </div>
-    </div>
-</div>
+<!--<header style="background-color: cornflowerblue; color: white; padding: 10px;">-->
+<!--    <div class="container">-->
+<!--        <div class="row justify-content-center">-->
+<!--            <div class="col-12 text-center">-->
+<!--                <h1>Mediscreen</h1>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</header>-->
+<!--<div class="container">-->
+<!--    <h1> Assess</h1>-->
+<!--    <div class="row">-->
+<!--        <div th:each="patientHistory : ${filteredList}" class="col-md-4 my-1">-->
+<!--            <a th:href="@{/PatHistory/patid/{patId}(patId=${patientHistory.patId})}">-->
+<!--                <p th:text="${patientHistory.lastname}"></p>-->
+<!--            </a>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 
-<script type="text/javascript" src="webjars/bootstrap/4.0.0-2/js/bootstrap.min.js"></script>
-</body>
-</html>
+<!--<script type="text/javascript" src="webjars/bootstrap/4.0.0-2/js/bootstrap.min.js"></script>-->
+<!--</body>-->
+<!--</html>-->

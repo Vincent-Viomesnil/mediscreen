@@ -22,7 +22,6 @@
         <a href="/Patient/add" class="btn btn-primary btn-sm">Add New Patient</a>
         <a href="/PatHistory/add" class="btn btn-primary btn-sm">Add New Note</a>
         <a th:href="@{/Patient/update/{id}(id=${patient.id})}" class="btn btn-info btn-sm">Update Patient</a>
-        <a th:href="@{/notes/{id}(id=${patient.id})}" class="btn btn-info btn-sm">Update Note</a>
         <form th:action="@{/Patient/delete/{id}(id=${patient.id})}" method="post"
               onsubmit="return confirm('Are you sure you want to delete this patient?')">
             <button type="submit" class="btn btn-danger btn-sm">Delete Patient</button>
@@ -62,9 +61,29 @@
     <div class="row">
         <div class="col-md-6">
             <h3>Notes:</h3>
-            <ul>
-                <li th:each="note : ${patientHistoryList}" th:text="${note.notes}"></li>
-            </ul>
+            <div class="row">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Notes</th>
+                        <th>Note_Id</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="note : ${patientHistoryList}">
+                        <td th:text="${note.notes}"></td>
+                        <td th:text="${note.noteId}"></td>
+                        <td class="text-center">
+                            <a th:href="@{/PatHistory/update/{noteId}(noteId=${note.noteId})}" class="btn btn-primary btn-sm">Update</a>
+                            <form th:action="@{/PatHistory/delete/{noteId}(noteId=${note.noteId})}" method="post" onsubmit="return confirm('Are you sure you want to delete this note?')">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <div class="row">

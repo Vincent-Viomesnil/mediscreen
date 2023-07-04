@@ -30,14 +30,14 @@ public class FrontController {
     private MicroservicePatientProxy microservicePatientProxy;
 
     @GetMapping("/notes/{patId}")
-    public String homePH(Model model, @PathVariable Long patId, RedirectAttributes redir) {
+    public String notesByPatId(@PathVariable Long patId, Model model, RedirectAttributes redir) {
         List<PatientHistoryBean> listNotesByPatId = microserviceNotesProxy.getListNotesByPatId(patId);
-        PatientBean patientBean = microservicePatientProxy.getPatientById(patId);
+        PatientBean patient = microservicePatientProxy.getPatientById(patId);
         model.addAttribute("listNotesByPatId", listNotesByPatId);
-        model.addAttribute("patientBean", patientBean);
+        model.addAttribute("patientBean", patient);
         redir.addFlashAttribute("success", "Patient successfully added");
 
-        return "HomePH";
+        return "Notes";
     }
 
     @GetMapping("/PatientList")
@@ -63,19 +63,19 @@ public class FrontController {
         }
     }
 
-    @GetMapping("/PatientHistoryList/Filter")
-    public String getSheetPatient(Model model) {
-        List<PatientHistoryBean> patientList = microserviceNotesProxy.patientList();
-
-        List<PatientHistoryBean> filteredList = patientList.stream()
-                .collect(Collectors.groupingBy(PatientHistoryBean::getPatId))
-                .values().stream()
-                .flatMap(group -> group.stream().limit(1))
-                .collect(Collectors.toList());
-
-        model.addAttribute("filteredList", filteredList);
-        return "Assess";
-    }
+//    @GetMapping("/PatientHistoryList/Filter")
+//    public String getSheetPatient(Model model) {
+//        List<PatientHistoryBean> patientList = microserviceNotesProxy.patientList();
+//
+//        List<PatientHistoryBean> filteredList = patientList.stream()
+//                .collect(Collectors.groupingBy(PatientHistoryBean::getPatId))
+//                .values().stream()
+//                .flatMap(group -> group.stream().limit(1))
+//                .collect(Collectors.toList());
+//
+//        model.addAttribute("filteredList", filteredList);
+//        return "Assess";
+//    }
 
     @GetMapping("/patientdetails")
     public String getPatientDetails(@RequestParam(name = "patId") Long patId, Model model, RedirectAttributes redir) {
@@ -219,11 +219,12 @@ public class FrontController {
     @GetMapping("/PatHistory/update/{id}")
     public String updateForm(@PathVariable Long id, Model model) {
         PatientHistoryBean patientHistory = microserviceNotesProxy.getNoteById(id);
-//      PatientHistoryBean patientHistory = new PatientHistoryBean();
+        List<PatientHistoryBean> patientHistoryList = microserviceNotesProxy.getListNotesByPatId(patientHistory.getPatId());
 
+        model.addAttribute("patientHistoryList", patientHistoryList);
         model.addAttribute("patientHistory", patientHistory);
 
-        return "UpdatePH";
+        return "UpdateNote";
     }
 
     @PostMapping(value = "/PatHistory/update/{id}")
@@ -232,16 +233,16 @@ public class FrontController {
         try {
             PatientHistoryBean patientHistory = microserviceNotesProxy.updateNoteById(id, patientToUpdate);
             model.addAttribute("patientHistory", patientHistory);
-            List<PatientHistoryBean> uniquePatientList = microserviceNotesProxy.patientList();
+            List<PatientHistoryBean> patientHistoryList = microserviceNotesProxy.getListNotesByPatId(patientHistory.getPatId());
 
-            model.addAttribute("uniquePatientList", uniquePatientList);
+            model.addAttribute("patientHistoryList", patientHistoryList);
             Long patId = patientToUpdate.getPatId();
             redir.addFlashAttribute("success", "Note successfully updated");
 
-            return "redirect:/notes/" + patId;
+            return "redirect:/patientdetails?patId=" + patId;
         } catch (FeignException e) {
             redir.addFlashAttribute("error", e.status() + " during operation");
-            return "HomePH";
+            return "Notes";
         }
     }
 
