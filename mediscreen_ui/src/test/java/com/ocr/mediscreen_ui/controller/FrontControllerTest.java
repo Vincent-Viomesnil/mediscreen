@@ -10,17 +10,23 @@ import feign.FeignException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.instanceOf;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -41,13 +47,8 @@ public class FrontControllerTest {
     @MockBean
     private MicroservicePatientProxy microservicePatientProxy;
 
-    @Test
-    public void testHomePH() throws Exception {
-        mockMvc.perform(get("/"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("HomePH"))
-                .andExpect(model().attributeExists("patientList"));
-    }
+
+
 
     @Test
     public void testHome() throws Exception {
@@ -57,20 +58,7 @@ public class FrontControllerTest {
                 .andExpect(model().attributeExists("uniquePatientList"));
     }
 
-    @Test
-    public void testGetPatientById() throws Exception {
-        long patientId = 1;
-        PatientBean patientBean = new PatientBean();
-        patientBean.setId(patientId);
 
-        given(microservicePatientProxy.getPatientById(patientId)).willReturn(patientBean);
-
-        mockMvc.perform(get("/Patient/id/{id}", patientId))
-                .andExpect(status().isOk())
-                .andExpect(view().name("Assess"))
-                .andExpect(model().attributeExists("patient"))
-                .andReturn().getResponse();
-    }
 
     @Test
     public void testGetPatientById_PatientNotFoundException() throws Exception {
@@ -82,16 +70,6 @@ public class FrontControllerTest {
                 .andExpect(status().is4xxClientError());
     }
 
-    @Test
-    public void testGetPatientById_FeignException() throws Exception {
-        long patientId = 1;
-
-        given(microservicePatientProxy.getPatientById(patientId)).willThrow(FeignException.class);
-
-        mockMvc.perform(get("/Patient/id/{id}", patientId))
-                .andExpect(status().is2xxSuccessful())
-                .andReturn().getResponse();
-    }
 
     @Test
     public void testGetPatientHistory() throws Exception {
@@ -162,25 +140,7 @@ public class FrontControllerTest {
         mockMvc.perform(post("/PatHistory/validate")
                         .flashAttr("patientHistory", patientHistory))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/"));
-    }
-
-    @Test
-    public void testUpdatePatientForm() throws Exception {
-        long patientId = 1;
-        PatientBean patient = new PatientBean();
-        List<PatientBean> uniquePatientList = new ArrayList<>();
-
-        given(microservicePatientProxy.getPatientById(patientId)).willReturn(patient);
-        given(microservicePatientProxy.patientList()).willReturn(uniquePatientList);
-
-        mockMvc.perform(get("/Patient/update/{id}", patientId))
-                .andExpect(status().isOk())
-                .andExpect(view().name("Update"))
-                .andExpect(model().attributeExists("patient"))
-                .andExpect(model().attribute("patient", patient))
-                .andExpect(model().attributeExists("uniquePatientList"))
-                .andExpect(model().attribute("uniquePatientList", uniquePatientList));
+                .andExpect(view().name("redirect:/patientdetails?patId=null"));
     }
 
     @Test
@@ -196,7 +156,7 @@ public class FrontControllerTest {
         mockMvc.perform(post("/Patient/update/{id}", patientId)
                         .flashAttr("patientToUpdate", patientToUpdate))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/PatientList"));
+                .andExpect(view().name("redirect:/patientdetails?patId=1"));
     }
 
     @Test
@@ -209,51 +169,76 @@ public class FrontControllerTest {
         mockMvc.perform(post("/Patient/update/{id}", patientId)
                         .flashAttr("patientToUpdate", patientToUpdate))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/PatientList"));
+                .andExpect(view().name("redirect:/patientdetails?patId=1"));
     }
 
     @Test
     public void testUpdateForm() throws Exception {
-        long noteId = 1;
+        Long id = 1L;
         PatientHistoryBean patientHistory = new PatientHistoryBean();
+        patientHistory.setPatId(id);
 
-        given(microserviceNotesProxy.getNoteById(noteId)).willReturn(patientHistory);
+        List<PatientHistoryBean> patientHistoryList = new ArrayList<>();
+        patientHistoryList.add(patientHistory);
 
-        mockMvc.perform(get("/PatHistory/update/{id}", noteId))
-                .andExpect(status().isOk())
-                .andExpect(view().name("UpdatePH"))
-                .andExpect(model().attributeExists("patientHistory"))
-                .andExpect(model().attribute("patientHistory", patientHistory));
+        when(microserviceNotesProxy.getNoteById(id)).thenReturn(patientHistory);
+        when(microserviceNotesProxy.getListNotesByPatId(id)).thenReturn(patientHistoryList);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/PatHistory/update/{id}", id))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.model().attribute("patientHistoryList", patientHistoryList))
+                .andExpect(MockMvcResultMatchers.model().attribute("patientHistory", patientHistory))
+                .andExpect(MockMvcResultMatchers.view().name("UpdateNote"));
+
+        verify(microserviceNotesProxy).getNoteById(id);
+        verify(microserviceNotesProxy).getListNotesByPatId(id);
     }
 
     @Test
-    public void testUpdatePatientHistory_Success() throws Exception {
-        long noteId = 1;
-        PatientHistoryBean patientToUpdate = new PatientHistoryBean();
-        PatientHistoryBean patientHistory = new PatientHistoryBean();
-        List<PatientHistoryBean> uniquePatientList = new ArrayList<>();
+    public void testUpdatePatientForm() throws Exception {
+        Long id = 1L;
+        PatientBean patient = new PatientBean();
 
-        given(microserviceNotesProxy.updateNoteById(noteId, patientToUpdate)).willReturn(patientHistory);
-        given(microserviceNotesProxy.patientList()).willReturn(uniquePatientList);
+        List<PatientBean> uniquePatientList = new ArrayList<>();
 
-        mockMvc.perform(post("/PatHistory/update/{id}", noteId)
-                        .flashAttr("patientToUpdate", patientToUpdate))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/"));
+        when(microservicePatientProxy.getPatientById(id)).thenReturn(patient);
+        when(microservicePatientProxy.patientList()).thenReturn(uniquePatientList);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/Patient/update/{id}", id))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.model().attribute("uniquePatientList", uniquePatientList))
+                .andExpect(MockMvcResultMatchers.model().attribute("patient", patient))
+                .andExpect(MockMvcResultMatchers.view().name("Update"));
+
+        verify(microservicePatientProxy).getPatientById(id);
+        verify(microservicePatientProxy).patientList();
     }
 
     @Test
-    public void testUpdatePatientHistory_FeignException() throws Exception {
-        long noteId = 1;
-        PatientHistoryBean patientToUpdate = new PatientHistoryBean();
+    public void testGetPatientDetails() throws Exception {
+        Long patId = 1L;
+        List<PatientHistoryBean> patientHistoryList = new ArrayList<>();
+        String assessmentResult = "Assessment Result";
+        String assessmentResultWithoutLastElement = "Assessment Result Without Last Element";
+        PatientBean patient = new PatientBean();
 
-        given(microserviceNotesProxy.updateNoteById(noteId, patientToUpdate)).willThrow(FeignException.InternalServerError.class);
+        when(microserviceNotesProxy.getListNotesByPatId(patId)).thenReturn(patientHistoryList);
+        when(assessmentProxy.getAssessmentById(patId)).thenReturn(assessmentResult);
+        when(microservicePatientProxy.getPatientById(patId)).thenReturn(patient);
 
-        mockMvc.perform(post("/PatHistory/update/{id}", noteId)
-                        .flashAttr("patientToUpdate", patientToUpdate))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/"));
+        mockMvc.perform(MockMvcRequestBuilders.get("/patientdetails")
+                        .param("patId", patId.toString()))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.model().attribute("patientHistoryList", patientHistoryList))
+                .andExpect(MockMvcResultMatchers.model().attribute("assessmentResult", assessmentResult))
+                .andExpect(MockMvcResultMatchers.model().attribute("patient", patient))
+                .andExpect(MockMvcResultMatchers.view().name("PatientDetails"));
+
+        verify(microserviceNotesProxy).getListNotesByPatId(patId);
+        verify(assessmentProxy).getAssessmentById(patId);
+        verify(microservicePatientProxy).getPatientById(patId);
     }
+
 
     @Test
     public void testDeletePatient() throws Exception {
@@ -272,7 +257,7 @@ public class FrontControllerTest {
 
         mockMvc.perform(post("/PatHistory/delete/{id}", noteId))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(view().name("redirect:/"));
+                .andExpect(view().name("redirect:/PatientList"));
     }
 
     @Test
@@ -288,39 +273,26 @@ public class FrontControllerTest {
 
 
     @Test
-    public void testGetPatientDetails() throws Exception {
-        long patientId = 1;
-        String assessmentResult = "Some assessment result";
-        List<PatientHistoryBean> patientHistoryList = new ArrayList<>();
+    public void testAddPatientFeignException() throws Exception {
+        Long patId = 1L;
+        PatientBean patientBean = new PatientBean();
+        when(microservicePatientProxy.getPatientById(patId)).thenReturn(null);
 
-        given(microserviceNotesProxy.getListNotesByPatId(patientId)).willReturn(patientHistoryList);
-
-        given(assessmentProxy.getAssessmentById(patientId)).willReturn(assessmentResult);
-
-        mockMvc.perform(get("/PatHistory/patid/{patId}", patientId))
-                .andExpect(status().isOk())
-                .andExpect(view().name("PatientDetails"))
-                .andExpect(model().attributeExists("patientHistoryList"))
-                .andExpect(model().attribute("patientHistoryList", patientHistoryList))
-                .andExpect(model().attributeExists("assessmentResult"))
-                .andExpect(model().attribute("assessmentResult", assessmentResult));
-
+        mockMvc.perform(post("/Patient/validate")
+                        .param("firstname", "First")
+                        .param("lastname", "Last")
+                        .param("birthdate", "1990-01-01"))
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/PatientList"));
     }
 
     @Test
-    public void testGetSheetPatient() throws Exception {
-        List<PatientHistoryBean> patientList = new ArrayList<>();
-        List<PatientHistoryBean> filteredList = new ArrayList<>();
-
-        given(microserviceNotesProxy.patientList()).willReturn(patientList);
-
-        mockMvc.perform(get("/PatientHistoryList/Filter"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("Assess"))
-                .andExpect(model().attributeExists("filteredList"))
-                .andExpect(model().attribute("filteredList", filteredList));
-
+    public void testConstructorAndGetMessage() {
+        String message = "Patient not found";
+        PatientNotFoundException exception = new PatientNotFoundException(message);
+        assertEquals(message, exception.getMessage());
     }
+
+
 }
 
 

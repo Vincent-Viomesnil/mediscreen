@@ -187,7 +187,6 @@ public class FrontController {
         }
     }
 
-
     @GetMapping("/PatHistory/update/{id}")
     public String updateForm(@PathVariable Long id, Model model) {
         PatientHistoryBean patientHistory = microserviceNotesProxy.getNoteById(id);
@@ -218,15 +217,12 @@ public class FrontController {
         }
     }
 
-
     @PostMapping("/Patient/delete/{id}")
     public String deletePatient(@PathVariable("id") Long id, RedirectAttributes redir, Model model) {
         microservicePatientProxy.deletePatientById(id);
         redir.addFlashAttribute("success", "Patient successfully deleted");
         return "redirect:/PatientList";
     }
-
-
 
     @PostMapping(value = "/PatHistory/delete/{id}")
     public String deletePatientById(@PathVariable Long id, Model model, RedirectAttributes redir) {
